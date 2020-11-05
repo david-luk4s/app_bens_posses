@@ -22,6 +22,7 @@ services:
         restart: always
         volumes:
             - .:/code/api_desafio_inquest
+            - ./static:/code/api_desafio_inquest/static
         expose: 
             - '8000'
         container_name: api_desafio_inquest
