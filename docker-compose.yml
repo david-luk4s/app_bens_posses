@@ -1,0 +1,50 @@
+version: '3.3'
+
+services:
+    nginx:
+        image: nginx:latest
+        restart: always
+        container_name: nginx_drf
+        ports:
+          - "8000:8000"
+        volumes:
+          - ./nginx:/etc/nginx/conf.d/
+          - ./static:/code/static
+        depends_on:
+          - api
+        external_links:
+          - api_desafio_inquest:api
+        networks:
+          - net_api
+
+    api:
+        build: .
+        restart: always
+        volumes:
+            - .:/code/api_desafio_inquest
+        expose: 
+            - '8000'
+        container_name: api_desafio_inquest
+        command: bash -c "python manage.py collectstatic --noinput && python manage.py makemigrations && python manage.py migrate && python manage.py test && gunicorn --reload core.wsgi:application --bind 0.0.0.0:8000 --workers 4"
+        depends_on:
+            - db
+        external_links:
+              - db_api_desafio_inquest:db
+        networks:
+            - net_api
+            - net_database
+
+    db:
+        image: postgres
+        container_name: db_api_desafio_inquest
+        restart: always
+        environment:
+            POSTGRES_USER: inquest
+            POSTGRES_DB: inquest_db
+            POSTGRES_PASSWORD: admin123
+        networks:
+            - net_database
+
+networks:
+    net_api:
+    net_database:
