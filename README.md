@@ -3,13 +3,26 @@
 Deploy com Docker Compose:
 
 ```
-docker-compose up -d
+docker-compose up -d --build
 ```
+
+Logs container:
+
+```
+docker logs api_desafio_inquest
+```
+
 
 Executar Teste:
 
 ```
-docker-compose exec api python manage.py test
+docker-compose exec app_inquest python manage.py test
+```
+
+Browser Url:
+
+```
+http://127.0.0.1:8000
 ```
 
 ## Contato Author

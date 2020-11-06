@@ -11,13 +11,13 @@ services:
           - ./nginx:/etc/nginx/conf.d/
           - ./static:/code/static
         depends_on:
-          - api
+          - app_inquest
         external_links:
-          - api_desafio_inquest:api
+          - api_desafio_inquest:app_inquest
         networks:
           - net_api
 
-    api:
+    app_inquest:
         build: .
         restart: always
         volumes:
@@ -25,7 +25,7 @@ services:
         expose: 
             - '8000'
         container_name: api_desafio_inquest
-        command: bash -c "python manage.py collectstatic --noinput && python manage.py makemigrations && python manage.py migrate && python manage.py test && gunicorn --reload core.wsgi:application --bind 0.0.0.0:8000 --workers 4"
+        command: bash -c "python manage.py collectstatic --noinput && python manage.py makemigrations pessoas empresas bens_posses && python manage.py migrate && python manage.py test && gunicorn --reload core.wsgi:application --bind 0.0.0.0:8000 --workers 4"
         depends_on:
             - db
         external_links:
